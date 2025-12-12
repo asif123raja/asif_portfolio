@@ -5,7 +5,7 @@ import * as THREE from 'three'
 
 function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
     const meshRef = useRef<THREE.InstancedMesh>(null)
-    const count = 100 // Even wider spread
+    const count = 170 // Even wider spread
     const dummy = useMemo(() => new THREE.Object3D(), [])
     const color = useMemo(() => new THREE.Color(), [])
 
