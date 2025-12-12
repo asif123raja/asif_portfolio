@@ -45,8 +45,8 @@ function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }
 
             // Distance from center (Edge Fading)
             const distCenter = Math.sqrt(x * x + z * z)
-            const maxDist = 60 // Start fading here
-            const fade = Math.max(0, 1 - Math.max(0, distCenter - maxDist) / 20)
+            const maxDist = 80 // Push fade start further
+            const fade = Math.max(0, 1 - Math.max(0, distCenter - maxDist) / 40) // Softer fade out
 
             // Interaction: Pop up if close
             const influence = Math.max(0, 15 - dist) / 15
@@ -92,7 +92,7 @@ function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }
                 roughness={0.5}
                 metalness={0.5}
                 emissive="#3300ff"
-                emissiveIntensity={0.2}
+                emissiveIntensity={0.4}
             />
         </instancedMesh>
     )
@@ -115,7 +115,7 @@ export default function InteractiveGrid() {
     return (
         <div className="fixed inset-0 z-[-1] pointer-events-none">
             <Canvas camera={{ position: [0, 40, 60], fov: 45 }} gl={{ alpha: true }}>
-                <fog attach="fog" args={['#030014', 40, 120]} />
+                <fog attach="fog" args={['#030014', 50, 160]} />
                 <ambientLight intensity={0.5} />
                 <pointLight position={[0, 20, 0]} intensity={2} color="#9d00ff" />
                 <directionalLight position={[10, 20, 10]} intensity={1} color="#00ffff" />
