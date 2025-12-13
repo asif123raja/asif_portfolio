@@ -21,11 +21,11 @@ export default function Footer() {
                         Let's Connect
                     </h3>
                     <div className="flex flex-col gap-2 text-gray-400">
-                        <a href="mailto:contact@example.com" className="hover:text-white transition-colors flex items-center gap-2 justify-center md:justify-start">
-                            <Mail size={18} /> contact@example.com
+                        <a href="mailto:asifulameen208@gmail.com" className="hover:text-white transition-colors flex items-center gap-2 justify-center md:justify-start">
+                            <Mail size={18} /> asifulameen208@gmail.com
                         </a>
-                        <a href="tel:+1234567890" className="hover:text-white transition-colors flex items-center gap-2 justify-center md:justify-start">
-                            <Phone size={18} /> +91 1234567890
+                        <a href="tel:+919800783055" className="hover:text-white transition-colors flex items-center gap-2 justify-center md:justify-start">
+                            <Phone size={18} /> +91 9800783055
                         </a>
                     </div>
                 </div>

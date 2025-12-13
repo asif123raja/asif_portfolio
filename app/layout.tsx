@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CursorAnimation from "@/components/CursorAnimation";
 import Navbar from "@/components/Navbar";
 import InteractiveGrid from "@/components/3d/InteractiveGrid";
+import TerminalButton from "@/components/TerminalButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
           <main className="relative flex flex-col min-h-screen">
             {children}
           </main>
+          <TerminalButton />
         </SmoothScroll>
       </body>
     </html>

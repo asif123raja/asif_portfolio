@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 const navItems = [
-    { name: 'Home', link: '#' },
-    { name: 'Skills', link: '#skills' },
-    { name: 'Projects', link: '#projects' },
-    { name: 'Interests', link: '#interests' },
+    { name: 'Home', link: '/' },
+    { name: 'Skills', link: '/#skills' },
+    { name: 'Projects', link: '/#projects' },
+    { name: 'Interests', link: '/#interests' },
 ]
 
 export default function Navbar() {
