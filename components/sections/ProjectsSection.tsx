@@ -53,11 +53,11 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
             <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
 
             <div className="absolute inset-0 p-8 flex flex-col justify-end z-10 transition-all duration-500">
-                <h3 className="text-3xl font-bold mb-2 translate-y-8 group-hover:translate-y-0 transition-transform duration-500 text-white">{project.title}</h3>
+                <h3 className="text-3xl font-bold mb-2 translate-y-8 group-hover:translate-y-0 transition-transform duration-500 text-foreground">{project.title}</h3>
                 <p className="text-gray-300 mb-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{project.description}</p>
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-200">
                     {project.tags.map((tag: string) => (
-                        <span key={tag} className="text-xs px-2 py-1 rounded bg-white/20 backdrop-blur-md text-white">{tag}</span>
+                        <span key={tag} className="text-xs px-2 py-1 rounded bg-foreground/10 backdrop-blur-md text-foreground">{tag}</span>
                     ))}
                 </div>
             </div>

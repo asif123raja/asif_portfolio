@@ -2,12 +2,14 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useRef, useEffect, useMemo } from 'react'
 import * as THREE from 'three'
+import { useTheme } from '../ThemeContext'
 
 function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
     const meshRef = useRef<THREE.InstancedMesh>(null)
     const count = 170 // Even wider spread
     const dummy = useMemo(() => new THREE.Object3D(), [])
     const color = useMemo(() => new THREE.Color(), [])
+    const { theme } = useTheme()
 
     // Grid parameters
     const size = 1.2
@@ -74,25 +76,50 @@ function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }
             meshRef.current.setMatrixAt(i, dummy.matrix)
 
             // Color update
-            const baseColor = new THREE.Color("#1a1a40")
-            const activeColor = new THREE.Color("#4488ff")
+            let baseColorVal = "#1a1a40" // Default base
+            let activeColorVal = "#4488ff" // Default active
+
+            if (theme === 'light') {
+                baseColorVal = "#e4e4e7" // Zinc-200
+                activeColorVal = "#2563eb" // Blue-600
+            } else if (theme === 'dark') {
+                baseColorVal = "#000000" // Pure Black
+                activeColorVal = "#a1a1aa" // Zinc-400
+            }
+
+            const baseColor = new THREE.Color(baseColorVal)
+            const activeColor = new THREE.Color(activeColorVal)
 
             const colorMix = Math.min(1, easeInfluence * 1.5)
             meshRef.current.setColorAt(i, color.copy(baseColor).lerp(activeColor, colorMix).multiplyScalar(fade)) // Fade color too
         }
+
         meshRef.current.instanceMatrix.needsUpdate = true
         if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true
     })
+
+    // Material props based on theme
+    const materialProps = theme === 'light' ? {
+        color: "#fafaab", // slight tint
+        emissive: "#2563eb",
+        emissiveIntensity: 0.1
+    } : theme === 'dark' ? {
+        color: "#000000",
+        emissive: "#ffffff",
+        emissiveIntensity: 0.2
+    } : {
+        color: "#1a1a40",
+        emissive: "#3300ff",
+        emissiveIntensity: 0.4
+    }
 
     return (
         <instancedMesh ref={meshRef} args={[undefined, undefined, count * count]} position={[0, -15, -30]} rotation={[0.3, 0, 0]}>
             <boxGeometry args={[1.2, 0.15, 1.2]} />
             <meshStandardMaterial
-                color="#1a1a40"
                 roughness={0.5}
                 metalness={0.5}
-                emissive="#3300ff"
-                emissiveIntensity={0.4}
+                {...materialProps}
             />
         </instancedMesh>
     )
@@ -100,6 +127,7 @@ function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }
 
 export default function InteractiveGrid() {
     const mouse = useRef<[number, number]>([0.5, 0.5])
+    const { theme } = useTheme()
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -112,13 +140,34 @@ export default function InteractiveGrid() {
         return () => window.removeEventListener('mousemove', handleMouseMove)
     }, [])
 
+    // Theme configurations
+    const themeConfig: Record<string, { fog: string; pointLight: string; directionLight: string }> = {
+        default: {
+            fog: '#030014',
+            pointLight: '#9d00ff',
+            directionLight: '#00ffff'
+        },
+        dark: {
+            fog: '#09090b',
+            pointLight: '#ffffff', // White
+            directionLight: '#71717a' // Zinc-500
+        },
+        light: {
+            fog: '#ffffff',
+            pointLight: '#2563eb',
+            directionLight: '#52525b'
+        }
+    }
+
+    const colors = themeConfig[theme] || themeConfig.default
+
     return (
         <div className="fixed inset-0 z-[-1] pointer-events-none">
             <Canvas camera={{ position: [0, 40, 60], fov: 45 }} gl={{ alpha: true }}>
-                <fog attach="fog" args={['#030014', 50, 160]} />
+                <fog attach="fog" args={[colors.fog, 50, 160]} />
                 <ambientLight intensity={0.5} />
-                <pointLight position={[0, 20, 0]} intensity={2} color="#9d00ff" />
-                <directionalLight position={[10, 20, 10]} intensity={1} color="#00ffff" />
+                <pointLight position={[0, 20, 0]} intensity={2} color={colors.pointLight} />
+                <directionalLight position={[10, 20, 10]} intensity={1} color={colors.directionLight} />
 
                 <TileGrid mouse={mouse} />
             </Canvas>

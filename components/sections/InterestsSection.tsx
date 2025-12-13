@@ -34,7 +34,7 @@ export default function InterestsSection() {
                     >
                         <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:border-primary/50 transition-all duration-300 relative overflow-hidden">
                             <div className="absolute inset-0 bg-primary/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            <item.icon className="w-10 h-10 text-gray-400 group-hover:text-white transition-colors relative z-10" />
+                            <item.icon className="w-10 h-10 text-foreground/40 group-hover:text-foreground transition-colors relative z-10" />
                         </div>
                         <span className="text-gray-400 font-medium group-hover:text-primary transition-colors">{item.name}</span>
                     </motion.div>

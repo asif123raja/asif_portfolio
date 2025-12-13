@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import ThemeToggle from './ThemeToggle'
 
 const navItems = [
     { name: 'Home', link: '/' },
@@ -11,8 +12,11 @@ const navItems = [
     { name: 'Interests', link: '/#interests' },
 ]
 
+import { usePathname } from 'next/navigation'
+
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false)
+    const pathname = usePathname()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -21,6 +25,9 @@ export default function Navbar() {
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
+
+    // Hide navbar in terminal
+    if (pathname === '/terminal') return null
 
     return (
         <motion.nav
@@ -33,19 +40,23 @@ export default function Navbar() {
             )}
         >
             <div className={cn(
-                "flex items-center gap-8 px-8 py-4 rounded-full border border-white/10 backdrop-blur-md transition-all duration-300 pointer-events-auto", // enable events on nav
-                scrolled ? "bg-black/50 shadow-lg shadow-purple-500/10" : "bg-white/5"
+                "flex items-center gap-8 px-8 py-4 rounded-full border border-foreground/10 backdrop-blur-md transition-all duration-300 pointer-events-auto", // enable events on nav
+                scrolled ? "bg-background/80 shadow-lg shadow-primary/10" : "bg-foreground/5"
             )}>
                 {navItems.map((item) => (
                     <Link
                         key={item.name}
                         href={item.link}
-                        className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group"
+                        className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors relative group"
                     >
                         {item.name}
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
                     </Link>
                 ))}
+            </div>
+
+            <div className="absolute right-8 top-6 pointer-events-auto">
+                <ThemeToggle />
             </div>
         </motion.nav>
     )

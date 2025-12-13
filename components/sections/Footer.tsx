@@ -10,21 +10,21 @@ const socialLinks = [
 
 export default function Footer() {
     return (
-        <footer className="relative bg-[#030014] pt-20 pb-10 px-4 md:px-20 border-t border-white/10 overflow-hidden">
+        <footer className="relative bg-background pt-20 pb-10 px-4 md:px-20 border-t border-foreground/10 overflow-hidden text-foreground">
             {/* Background Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[500px] h-[500px] bg-purple-900/20 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[500px] h-[500px] bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10 relative z-10">
                 {/* Brand / Contact */}
                 <div className="text-center md:text-left">
-                    <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 mb-4">
+                    <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-4">
                         Let's Connect
                     </h3>
-                    <div className="flex flex-col gap-2 text-gray-400">
-                        <a href="mailto:asifulameen208@gmail.com" className="hover:text-white transition-colors flex items-center gap-2 justify-center md:justify-start">
+                    <div className="flex flex-col gap-2 text-foreground/60">
+                        <a href="mailto:asifulameen208@gmail.com" className="hover:text-foreground transition-colors flex items-center gap-2 justify-center md:justify-start">
                             <Mail size={18} /> asifulameen208@gmail.com
                         </a>
-                        <a href="tel:+919800783055" className="hover:text-white transition-colors flex items-center gap-2 justify-center md:justify-start">
+                        <a href="tel:+919800783055" className="hover:text-foreground transition-colors flex items-center gap-2 justify-center md:justify-start">
                             <Phone size={18} /> +91 9800783055
                         </a>
                     </div>
@@ -38,12 +38,12 @@ export default function Footer() {
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-white font-medium backdrop-blur-sm transition-all flex items-center gap-2 group"
+                        className="px-6 py-3 bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 rounded-full text-foreground font-medium backdrop-blur-sm transition-all flex items-center gap-2 group"
                     >
                         <span>View Resume</span>
-                        <ExternalLink size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+                        <ExternalLink size={18} className="text-foreground/60 group-hover:text-foreground transition-colors" />
                     </motion.a>
-                    <a href="/ASIF_resume.pdf" download className="text-sm text-gray-400 hover:text-primary transition-colors flex items-center gap-1">
+                    <a href="/ASIF_resume.pdf" download className="text-sm text-foreground/60 hover:text-primary transition-colors flex items-center gap-1">
                         Download PDF
                     </a>
                 </div>
@@ -57,9 +57,9 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             whileHover={{ y: -5, scale: 1.1 }}
-                            className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/20 hover:border-purple-500/50 transition-all group"
+                            className="p-3 rounded-full bg-foreground/5 border border-foreground/10 hover:bg-foreground/20 hover:border-primary/50 transition-all group"
                         >
-                            <link.icon className="w-6 h-6 text-gray-400 group-hover:text-white transition-colors" />
+                            <link.icon className="w-6 h-6 text-foreground/60 group-hover:text-foreground transition-colors" />
                         </motion.a>
                     ))}
                 </div>

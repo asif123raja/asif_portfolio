@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /* Default Theme (Futuristic Blue) */
   --background: #030014;
   --foreground: #ffffff;
   --primary: #9d00ff;
@@ -8,6 +9,30 @@
   --accent: #ff00ff;
   --muted: #1a1a2e;
   --card: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] {
+  /* Dark Theme (Neutral Dark) */
+  --background: #09090b;
+  --foreground: #fafafa;
+  --primary: #3b82f6;
+  /* Blue-500 */
+  --secondary: #10b981;
+  /* Emerald-500 */
+  --accent: #f59e0b;
+  --muted: #27272a;
+  --card: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='light'] {
+  /* Light Theme (Minimalist) */
+  --background: #ffffff;
+  --foreground: #09090b;
+  --primary: #000000;
+  --secondary: #52525b;
+  --accent: #2563eb;
+  --muted: #f4f4f5;
+  --card: rgba(0, 0, 0, 0.05);
 }
 
 @theme inline {
@@ -25,16 +50,19 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
-  cursor: none; /* Hide default cursor for custom one */
+  cursor: none;
+  /* Hide default cursor for custom one */
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--background);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
   border-radius: 4px;

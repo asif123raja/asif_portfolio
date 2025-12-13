@@ -6,6 +6,7 @@ import CursorAnimation from "@/components/CursorAnimation";
 import Navbar from "@/components/Navbar";
 import InteractiveGrid from "@/components/3d/InteractiveGrid";
 import TerminalButton from "@/components/TerminalButton";
+import { ThemeProvider } from "@/components/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,19 +29,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-primary/30 selection:text-white`}
       >
-        <SmoothScroll>
-          <InteractiveGrid />
-          <CursorAnimation />
-          <Navbar />
-          <main className="relative flex flex-col min-h-screen">
-            {children}
-          </main>
-          <TerminalButton />
-        </SmoothScroll>
+        <ThemeProvider>
+          <SmoothScroll>
+            <InteractiveGrid />
+            <CursorAnimation />
+            <Navbar />
+            <main className="relative flex flex-col min-h-screen">
+              {children}
+            </main>
+            <TerminalButton />
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );
