@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-:root {
-  /* Default Theme (Futuristic Blue) */
+:root,
+[data-theme='dark'] {
+  /* Dark Theme (Futuristic) — default */
   --background: #030014;
   --foreground: #ffffff;
   --primary: #9d00ff;
@@ -11,28 +12,15 @@
   --card: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme='dark'] {
-  /* Dark Theme (Neutral Dark) */
-  --background: #09090b;
-  --foreground: #fafafa;
-  --primary: #3b82f6;
-  /* Blue-500 */
-  --secondary: #10b981;
-  /* Emerald-500 */
-  --accent: #f59e0b;
-  --muted: #27272a;
-  --card: rgba(255, 255, 255, 0.05);
-}
-
 [data-theme='light'] {
-  /* Light Theme (Minimalist) */
-  --background: #ffffff;
-  --foreground: #09090b;
-  --primary: #000000;
-  --secondary: #52525b;
+  /* Light Theme — high contrast */
+  --background: #fafaf9;
+  --foreground: #1c1917;
+  --primary: #7c3aed;
+  --secondary: #0d9488;
   --accent: #2563eb;
-  --muted: #f4f4f5;
-  --card: rgba(0, 0, 0, 0.05);
+  --muted: #e7e5e4;
+  --card: rgba(0, 0, 0, 0.04);
 }
 
 @theme inline {
@@ -52,6 +40,69 @@ body {
   overflow-x: hidden;
   cursor: none;
   /* Hide default cursor for custom one */
+}
+
+/* ---- Light mode overrides for contrast ---- */
+[data-theme='light'] .text-gray-400 {
+  color: #57534e !important; /* stone-600 */
+}
+[data-theme='light'] .text-gray-300 {
+  color: #44403c !important; /* stone-700 */
+}
+[data-theme='light'] .text-gray-200 {
+  color: #292524 !important; /* stone-800 */
+}
+[data-theme='light'] .text-gray-100 {
+  color: #1c1917 !important; /* stone-900 */
+}
+[data-theme='light'] .text-gray-500 {
+  color: #78716c !important; /* stone-500 */
+}
+[data-theme='light'] .text-white {
+  color: #1c1917 !important;
+}
+[data-theme='light'] .from-white {
+  --tw-gradient-from: #1c1917 !important;
+}
+[data-theme='light'] .to-gray-400 {
+  --tw-gradient-to: #57534e !important;
+}
+[data-theme='light'] .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+[data-theme='light'] .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+[data-theme='light'] .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+[data-theme='light'] .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+[data-theme='light'] .bg-black\/40 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+[data-theme='light'] .bg-black\/20 {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+}
+[data-theme='light'] .from-white\/20 {
+  --tw-gradient-from: rgba(28, 25, 23, 0.25) !important;
+}
+
+/* Project card backgrounds */
+.project-card-inner {
+  background: rgba(10, 10, 15, 0.7);
+}
+[data-theme='light'] .project-card-inner {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+}
+[data-theme='light'] .hover\:bg-white\/20:hover {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+[data-theme='light'] .group-hover\:border-white\/30 {
+  border-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Custom Scrollbar */

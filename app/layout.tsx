@@ -4,7 +4,6 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CursorAnimation from "@/components/CursorAnimation";
 import Navbar from "@/components/Navbar";
-import InteractiveGrid from "@/components/3d/InteractiveGrid";
 import TerminalButton from "@/components/TerminalButton";
 import { ThemeProvider } from "@/components/ThemeContext";
 
@@ -35,7 +34,6 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <SmoothScroll>
-            <InteractiveGrid />
             <CursorAnimation />
             <Navbar />
             <main className="relative flex flex-col min-h-screen">

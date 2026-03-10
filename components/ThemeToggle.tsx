@@ -1,64 +1,105 @@
 'use client'
 
-import { useTheme, Theme } from './ThemeContext'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Monitor, Sun, Moon, Laptop2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useTheme } from './ThemeContext'
+import { useRef, useEffect } from 'react'
+import { gsap } from 'gsap'
 
 export default function ThemeToggle() {
-    const { theme, setTheme } = useTheme()
-    const [isOpen, setIsOpen] = useState(false)
+    const { theme, toggleTheme } = useTheme()
+    const buttonRef = useRef<HTMLButtonElement>(null)
+    const sunRef = useRef<SVGSVGElement>(null)
+    const moonRef = useRef<SVGSVGElement>(null)
 
-    const themes: { id: Theme; label: string; icon: React.ReactNode }[] = [
-        { id: 'default', label: 'Default', icon: <Monitor size={20} /> },
-        { id: 'dark', label: 'Dark', icon: <Laptop2 size={20} /> },
-        { id: 'light', label: 'Light', icon: <Sun size={20} /> },
-    ]
+    const isDark = theme === 'dark'
 
-    const currentIcon = themes.find(t => t.id === theme)?.icon
+    // Animate icon swap on theme change
+    useEffect(() => {
+        if (!sunRef.current || !moonRef.current) return
+
+        if (isDark) {
+            // Show moon, hide sun
+            gsap.to(sunRef.current, { scale: 0, rotation: -90, opacity: 0, duration: 0.4, ease: "back.in(2)" })
+            gsap.to(moonRef.current, { scale: 1, rotation: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", delay: 0.15 })
+        } else {
+            // Show sun, hide moon
+            gsap.to(moonRef.current, { scale: 0, rotation: 90, opacity: 0, duration: 0.4, ease: "back.in(2)" })
+            gsap.to(sunRef.current, { scale: 1, rotation: 0, opacity: 1, duration: 0.4, ease: "back.out(2)", delay: 0.15 })
+        }
+    }, [isDark])
+
+    // Button hover/tap
+    useEffect(() => {
+        const btn = buttonRef.current
+        if (!btn) return
+
+        const enter = () => gsap.to(btn, { scale: 1.15, duration: 0.2, ease: "power2.out" })
+        const leave = () => gsap.to(btn, { scale: 1, duration: 0.2, ease: "power2.inOut" })
+        const down = () => gsap.to(btn, { scale: 0.9, duration: 0.1, ease: "power2.out" })
+        const up = () => gsap.to(btn, { scale: 1.15, duration: 0.1, ease: "power2.inOut" })
+
+        btn.addEventListener('mouseenter', enter)
+        btn.addEventListener('mouseleave', leave)
+        btn.addEventListener('mousedown', down)
+        btn.addEventListener('mouseup', up)
+
+        return () => {
+            btn.removeEventListener('mouseenter', enter)
+            btn.removeEventListener('mouseleave', leave)
+            btn.removeEventListener('mousedown', down)
+            btn.removeEventListener('mouseup', up)
+        }
+    }, [])
 
     return (
-        <div className="relative z-50">
-            <motion.button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground/60 hover:text-foreground transition-colors border border-foreground/10"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+        <button
+            ref={buttonRef}
+            onClick={toggleTheme}
+            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            className="relative p-2.5 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground/70 hover:text-foreground transition-colors border border-foreground/10 will-change-transform w-10 h-10 flex items-center justify-center overflow-hidden"
+        >
+            {/* Sun Icon */}
+            <svg
+                ref={sunRef}
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="absolute"
+                style={{ opacity: isDark ? 0 : 1, transform: isDark ? 'scale(0) rotate(-90deg)' : 'scale(1) rotate(0deg)' }}
             >
-                {currentIcon}
-            </motion.button>
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2" />
+                <path d="M12 20v2" />
+                <path d="m4.93 4.93 1.41 1.41" />
+                <path d="m17.66 17.66 1.41 1.41" />
+                <path d="M2 12h2" />
+                <path d="M20 12h2" />
+                <path d="m6.34 17.66-1.41 1.41" />
+                <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
 
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute right-0 mt-2 w-32 rounded-lg bg-background border border-foreground/10 backdrop-blur-xl overflow-hidden shadow-xl"
-                        onMouseLeave={() => setIsOpen(false)}
-                    >
-                        {themes.map((t) => (
-                            <button
-                                key={t.id}
-                                onClick={() => {
-                                    setTheme(t.id)
-                                    setIsOpen(false)
-                                }}
-                                className={cn(
-                                    "w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors text-left",
-                                    theme === t.id
-                                        ? "bg-primary/20 text-foreground font-medium"
-                                        : "text-foreground/60 hover:bg-foreground/5 hover:text-foreground"
-                                )}
-                            >
-                                {t.icon}
-                                <span>{t.label}</span>
-                            </button>
-                        ))}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+            {/* Moon Icon */}
+            <svg
+                ref={moonRef}
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="absolute"
+                style={{ opacity: isDark ? 1 : 0, transform: isDark ? 'scale(1) rotate(0deg)' : 'scale(0) rotate(90deg)' }}
+            >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+        </button>
     )
 }

@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 
 interface CommandHistory {

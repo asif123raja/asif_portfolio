@@ -1,108 +1,180 @@
 'use client'
 import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Canvas } from '@react-three/fiber'
-import ProjectCarousel from '../3d/ProjectCarousel'
+import { Github, ExternalLink } from 'lucide-react'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SparklesText from '../ui/SparklesText'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
     {
-        title: "Project Alpha",
-        description: "A futuristic dashboard with real-time data visualization.",
-        tags: ["Next.js", "D3.js", "Tailwind"],
-        color: "#00ffff", // Single color for glow
+        title: "AI Mock Interview System",
+        description: "AI-powered platform using Next.js, Node.js, and LLM APIs to conduct automated interviews and generate structured feedback. Implemented real-time facial emotion analysis using MediaPipe.",
+        tags: ["Next.js", "FastAPI", "MediaPipe", "PostgreSQL", "Firebase"],
+        color: "#9d00ff", // Purple Glow
+        bgSplash: `path("M 0 303.5 C 0 292.454 8.995 285.101 20 283.5 L 460 219.5 C 470.085 218.033 480 228.454 480 239.5 L 500 430 C 500 441.046 491.046 450 480 450 L 20 450 C 8.954 450 0 441.046 0 430 Z")`,
+        gradient: "linear-gradient(306deg, #7c3aed, #4f46e5)", // Violet-Indigo
         githubUrl: "https://github.com",
         liveUrl: "https://vercel.com"
     },
     {
-        title: "Neon Commerce",
-        description: "E-commerce platform with immersive 3D product previews.",
-        tags: ["React", "Three.js", "Stripe"],
-        color: "#ff00ff",
+        title: "Cybersecurity Intrusion Detection",
+        description: "Network threat detection system using Random Forest and other ML models for high-accuracy and explainable cybersecurity monitoring.",
+        tags: ["Machine Learning", "Random Forest", "Python", "Cybersecurity"],
+        color: "#00ff88", // Green Glow
+        bgSplash: `path("M 0 303.5 C 0 292.454 8.995 285.101 20 283.5 L 460 219.5 C 470.085 218.033 480 228.454 480 239.5 L 500 430 C 500 441.046 491.046 450 480 450 L 20 450 C 8.954 450 0 441.046 0 430 Z")`,
+        gradient: "linear-gradient(306deg, #10b981, #059669)", // Emerald
         githubUrl: "https://github.com",
         liveUrl: "https://vercel.com"
     },
     {
-        title: "AI Chat Interface",
-        description: "Minimalist chat interface powered by generative AI.",
-        tags: ["OpenAI", "Node.js", "Socket.io"],
-        color: "#00ff88",
+        title: "KrishiMart B2B",
+        description: "Bulk trading platform for agricultural produce with real-time inventory management, location-based tracking, and scalable order logic.",
+        tags: ["React", "Node.js", "MongoDB", "Logistics"],
+        color: "#00ffff", // Cyan Glow
+        bgSplash: `path("M 0 303.5 C 0 292.454 8.995 285.101 20 283.5 L 460 219.5 C 470.085 218.033 480 228.454 480 239.5 L 500 430 C 500 441.046 491.046 450 480 450 L 20 450 C 8.954 450 0 441.046 0 430 Z")`,
+        gradient: "linear-gradient(306deg, #0ea5e9, #0284c7)", // Sky
         githubUrl: "https://github.com",
         liveUrl: "https://vercel.com"
     },
     {
-        title: "Cyber Portfolio",
-        description: "Personal portfolio website with high-end animations.",
-        tags: ["Framer Motion", "Lenis", "GSAP"],
-        color: "#ff8800",
+        title: "Structured-to-Text Engine",
+        description: "Built a highly efficient Structured-to-Text engine to translate complex network anomalies into readable, explainable reports.",
+        tags: ["NLP", "LLM", "Phi-3-mini", "LoRA"],
+        color: "#ff00ff", // Pink Glow
+        bgSplash: `path("M 0 303.5 C 0 292.454 8.995 285.101 20 283.5 L 460 219.5 C 470.085 218.033 480 228.454 480 239.5 L 500 430 C 500 441.046 491.046 450 480 450 L 20 450 C 8.954 450 0 441.046 0 430 Z")`,
+        gradient: "linear-gradient(306deg, #ec4899, #db2777)", // Pink
         githubUrl: "https://github.com",
         liveUrl: "https://vercel.com"
     }
 ]
 
-// Single Project Card Component
+// Single Project Card driven by native GSAP ScrollTrigger
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ProjectCard({ project, index }: { project: any, index: number }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="group relative w-full h-[400px] rounded-3xl overflow-hidden cursor-pointer border border-white/5 bg-white/5"
-        >
-            <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+function ProjectAnimationCard({ project, index }: { project: any, index: number }) {
+    const cardRef = useRef<HTMLDivElement>(null)
+    const isEven = index % 2 === 0;
 
-            <div className="absolute inset-0 p-8 flex flex-col justify-end z-10 transition-all duration-500">
-                <h3 className="text-3xl font-bold mb-2 translate-y-8 group-hover:translate-y-0 transition-transform duration-500 text-foreground">{project.title}</h3>
-                <p className="text-gray-300 mb-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{project.description}</p>
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-200">
-                    {project.tags.map((tag: string) => (
-                        <span key={tag} className="text-xs px-2 py-1 rounded bg-foreground/10 backdrop-blur-md text-foreground">{tag}</span>
-                    ))}
+    useGSAP(() => {
+        gsap.from(cardRef.current, {
+            scrollTrigger: {
+                trigger: cardRef.current,
+                start: "top 80%",
+                end: "bottom 20%",
+                toggleActions: "play reverse play reverse",
+            },
+            y: 300,
+            opacity: 0,
+            duration: 1,
+            ease: "back.out(1.2)"
+        })
+    }, [])
+
+    return (
+        <div
+            ref={cardRef}
+            className="w-full flex justify-center items-center relative overflow-hidden py-10 my-[-40px] md:my-[-80px] lg:my-[-120px]"
+        >
+            {/* The SVG Splash Mask (Optional underlying graphic) */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-20"
+                style={{
+                    background: project.gradient,
+                    clipPath: project.bgSplash,
+                }}
+            />
+
+            <div 
+                className={`project-card-inner relative w-[90%] md:w-[600px] lg:w-[800px] min-h-[350px] flex flex-col justify-end rounded-3xl p-8 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden group hover:scale-[1.02] transition-transform duration-500 will-change-transform`}
+                style={{
+                    rotate: isEven ? "-2deg" : "2deg",
+                    transformOrigin: "center center"
+                }}
+            >
+                {/* Beautiful dynamic hover glow based on project specific color */}
+                <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700 ease-in-out pointer-events-none"
+                    style={{ background: `radial-gradient(circle at 50% 120%, ${project.color}, transparent 60%)` }}
+                />
+
+                <div className="relative z-10 flex flex-col gap-4">
+                    <h3 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">
+                        {project.title}
+                    </h3>
+                    
+                    <p className="text-gray-300 md:text-lg leading-relaxed max-w-2xl">
+                        {project.description}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2 mt-4">
+                        {project.tags.map((tag: string) => (
+                            <span 
+                                key={tag} 
+                                className="text-xs md:text-sm px-3 md:px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-200 backdrop-blur-md"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+
+                    <div className="flex gap-4 mt-6">
+                        {project.githubUrl && (
+                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors border border-white/10 group-hover:border-white/30">
+                                <Github className="w-5 h-5 text-white" />
+                            </a>
+                        )}
+                        {project.liveUrl && (
+                            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors border border-white/10 group-hover:border-white/30">
+                                <ExternalLink className="w-5 h-5 text-white" />
+                            </a>
+                        )}
+                    </div>
                 </div>
             </div>
-
-            {/* Hover shimmer */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-in-out" />
-        </motion.div>
+        </div>
     )
 }
 
 export default function ProjectsSection() {
     const containerRef = useRef<HTMLDivElement>(null)
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end end']
-    })
+    const headerRef = useRef<HTMLHeadingElement>(null)
+
+    useGSAP(() => {
+        // Fade out "PROJECTS" header slightly as we scroll deep into list via scrub
+        gsap.to(headerRef.current, {
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top top",
+                end: "30% top",
+                scrub: true,
+            },
+            opacity: 0.2,
+            ease: "none"
+        })
+    }, { scope: containerRef })
 
     return (
-        <section ref={containerRef} id="projects" className="relative h-[500vh] bg-transparent">
-            <div className="sticky top-0 h-screen flex flex-col justify-center items-center overflow-hidden">
-                <motion.h2
-                    initial={{ opacity: 0, y: -50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="absolute top-20 text-5xl md:text-8xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-600 z-10 pointer-events-none"
-                    style={{
-                        opacity: useTransform(scrollYProgress, [0, 0.2], [1, 0])
-                    }}
-                >
-                    PROJECTS
-                </motion.h2>
-
-                <div className="w-full h-full">
-                    <Canvas camera={{ position: [0, 0, 14], fov: 45 }} gl={{ alpha: true, antialias: true }}>
-                        {/* Adjusted fog to start further back so back cards are visible */}
-                        <fog attach="fog" args={['#000', 18, 40]} />
-                        <ambientLight intensity={0.8} />
-                        <pointLight position={[10, 10, 10]} intensity={1} />
-                        <ProjectCarousel projects={projects} scrollYProgress={scrollYProgress} />
-                    </Canvas>
+        <section id="projects" className="relative bg-transparent pt-32 pb-48 overflow-hidden min-h-screen">
+            
+            {/* Massive Parallax Header */}
+            <div ref={containerRef} className="sticky top-20 w-full flex justify-center z-20 pointer-events-none select-none px-4 h-0 overflow-visible">
+                <div ref={headerRef} className="flex justify-center w-full">
+                    <SparklesText 
+                        text="PROJECTS" 
+                        className="text-5xl md:text-[10rem] font-bold text-center" 
+                        textClassName="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
+                        colors={{ first: "#a78bfa", second: "#f472b6" }}
+                    />
                 </div>
+            </div>
 
-                <div className="absolute bottom-10 text-white/50 animate-bounce pointer-events-none">
-                    Scroll to Rotate
-                </div>
+            {/* Scroll-Triggered Card Stack */}
+            <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col items-center mt-[180px] md:mt-[240px] px-4 md:px-0">
+                {projects.map((project, index) => (
+                    <ProjectAnimationCard key={project.title} project={project} index={index} />
+                ))}
             </div>
         </section>
     )

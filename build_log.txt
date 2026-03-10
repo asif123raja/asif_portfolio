@@ -1,0 +1,79 @@
+
+> asif@0.1.0 build
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\asifu\Documents\next-jssss\LAST PORTFOLIO\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\asifu\Documents\next-jssss\LAST PORTFOLIO\asif\package-lock.json
+
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Turbopack build encountered 1 warnings:
+./asif/app/api/convert/route.ts:11:14
+Next.js can't recognize the exported `config` field in route. Page config in `config` is deprecated and ignored, use individual exports instead.
+   9 |
+  10 | // Set config for Next.js to disable body parsing, allowing request.formData()
+> 11 | export const config = {
+     |              ^^^^^^
+  12 |     api: {
+  13 |         bodyParser: false,
+  14 |     },
+
+The exported configuration object in a source file needs to have a very specific format from which some properties can be statically parsed at compiled-time.
+
+https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+
+
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./asif/components/3d/InteractiveGrid.tsx:2:1
+Module not found: Can't resolve '@react-three/fiber'
+  1 | 'use client'
+> 2 | import { Canvas, useFrame } from '@react-three/fiber'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 | import { useRef, useEffect, useMemo } from 'react'
+  4 | import * as THREE from 'three'
+  5 | import { useTheme } from '../ThemeContext'
+
+
+
+Import trace:
+  Server Component:
+    ./asif/components/3d/InteractiveGrid.tsx
+    ./asif/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./asif/components/3d/InteractiveGrid.tsx:4:1
+Module not found: Can't resolve 'three'
+  2 | import { Canvas, useFrame } from '@react-three/fiber'
+  3 | import { useRef, useEffect, useMemo } from 'react'
+> 4 | import * as THREE from 'three'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 | import { useTheme } from '../ThemeContext'
+  6 |
+  7 | function TileGrid({ mouse }: { mouse: React.MutableRefObject<[number, number]> }) {
+
+
+
+Import trace:
+  Server Component:
+    ./asif/components/3d/InteractiveGrid.tsx
+    ./asif/app/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./asif/components/3d/InteractiveGrid.tsx:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./asif/components/3d/InteractiveGrid.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

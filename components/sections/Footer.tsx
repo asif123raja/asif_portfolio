@@ -1,6 +1,8 @@
 'use client'
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
 import { Github, Linkedin, Instagram, Mail, Phone, ExternalLink } from 'lucide-react'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
 
 const socialLinks = [
     { name: 'GitHub', icon: Github, href: 'https://github.com/asif123raja' },
@@ -9,6 +11,28 @@ const socialLinks = [
 ]
 
 export default function Footer() {
+    const resumeBtnRef = useRef<HTMLAnchorElement>(null)
+    const socialRefs = useRef<(HTMLAnchorElement | null)[]>([])
+
+    useGSAP(() => {
+        // Resume button hover logic
+        const btn = resumeBtnRef.current
+        if (btn) {
+            btn.addEventListener('mouseenter', () => gsap.to(btn, { scale: 1.05, duration: 0.2, ease: "power2.out" }))
+            btn.addEventListener('mouseleave', () => gsap.to(btn, { scale: 1, duration: 0.2, ease: "power2.inOut" }))
+            btn.addEventListener('mousedown', () => gsap.to(btn, { scale: 0.95, duration: 0.1, ease: "power2.out" }))
+            btn.addEventListener('mouseup', () => gsap.to(btn, { scale: 1.05, duration: 0.1, ease: "power2.inOut" }))
+        }
+
+        // Social links hover logic
+        socialRefs.current.forEach((el) => {
+            if (el) {
+                el.addEventListener('mouseenter', () => gsap.to(el, { y: -5, scale: 1.1, duration: 0.2, ease: "power2.out" }))
+                el.addEventListener('mouseleave', () => gsap.to(el, { y: 0, scale: 1, duration: 0.2, ease: "power2.inOut" }))
+            }
+        })
+    }, [])
+
     return (
         <footer className="relative bg-background pt-20 pb-10 px-4 md:px-20 border-t border-foreground/10 overflow-hidden text-foreground">
             {/* Background Glow */}
@@ -32,17 +56,16 @@ export default function Footer() {
 
                 {/* Resume Button */}
                 <div className="flex flex-col items-center md:items-end gap-4">
-                    <motion.a
+                    <a
+                        ref={resumeBtnRef}
                         href="/ASIF_resume.pdf"
                         target="_blank"
                         rel="noopener noreferrer"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-6 py-3 bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 rounded-full text-foreground font-medium backdrop-blur-sm transition-all flex items-center gap-2 group"
+                        className="px-6 py-3 bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 rounded-full text-foreground font-medium backdrop-blur-sm transition-colors flex items-center gap-2 group will-change-transform"
                     >
                         <span>View Resume</span>
                         <ExternalLink size={18} className="text-foreground/60 group-hover:text-foreground transition-colors" />
-                    </motion.a>
+                    </a>
                     <a href="/ASIF_resume.pdf" download className="text-sm text-foreground/60 hover:text-primary transition-colors flex items-center gap-1">
                         Download PDF
                     </a>
@@ -50,17 +73,17 @@ export default function Footer() {
 
                 {/* Social Links */}
                 <div className="flex gap-6">
-                    {socialLinks.map((link) => (
-                        <motion.a
+                    {socialLinks.map((link, i) => (
+                        <a
                             key={link.name}
+                            ref={(el) => { socialRefs.current[i] = el }}
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ y: -5, scale: 1.1 }}
-                            className="p-3 rounded-full bg-foreground/5 border border-foreground/10 hover:bg-foreground/20 hover:border-primary/50 transition-all group"
+                            className="p-3 rounded-full bg-foreground/5 border border-foreground/10 hover:bg-foreground/20 hover:border-primary/50 transition-colors group will-change-transform"
                         >
                             <link.icon className="w-6 h-6 text-foreground/60 group-hover:text-foreground transition-colors" />
-                        </motion.a>
+                        </a>
                     ))}
                 </div>
             </div>

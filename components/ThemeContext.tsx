@@ -2,22 +2,23 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-export type Theme = 'default' | 'dark' | 'light'
+export type Theme = 'dark' | 'light'
 
 interface ThemeContextType {
     theme: Theme
     setTheme: (theme: Theme) => void
+    toggleTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<Theme>('default')
+    const [theme, setTheme] = useState<Theme>('dark')
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme') as Theme
-        if (savedTheme) {
+        if (savedTheme === 'light' || savedTheme === 'dark') {
             setTheme(savedTheme)
         }
         setMounted(true)
@@ -29,12 +30,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('theme', theme)
     }, [theme, mounted])
 
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'dark' ? 'light' : 'dark')
+    }
+
     if (!mounted) {
         return null
     }
 
     return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
+        <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
             {children}
         </ThemeContext.Provider>
     )
